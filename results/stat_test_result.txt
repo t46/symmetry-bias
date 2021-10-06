@@ -1,0 +1,8 @@
+Shapiro-Wilk Test 1: stat=0.990, p=0.699
+Shapiro-Wilk Test 2: stat=0.944, p=0.000
+Reject hypothesis of Gaussianity
+
+Wilcoxon Signed-Rank Test: stat=0.000, p=0.000
+Reject hypothesis of equal median
+
+Difference is significant
