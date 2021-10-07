@@ -10,8 +10,10 @@ import torch
 import copy
 
 import sys
+
 sys.path.append('..')
 from models.simple_models import ForwardModel, BackwardModel
+from utils.metrics import calc_accuracy
 
 
 class ExperimentManager():
@@ -99,11 +101,13 @@ class ExperimentManager():
             The number of test iterations. Defaults to 500.
         """
         self.test_losses_backward = []
+        self.accuracies_backward = []
         self.probs_x0_given_y = []
         self.probs_x1_given_y = []
         self.steps_to_converge = test_iterations
 
         self.test_losses_backward_test_only = []
+        self.accuracies_backward_test_only = []
         self.probs_x0_given_y_test_only = []
         self.probs_x1_given_y_test_only = []
         self.steps_to_converge_test_only = test_iterations
@@ -115,6 +119,7 @@ class ExperimentManager():
             idx = np.random.choice(2)
             x = self.X[idx].unsqueeze(0)
             y_one_hot = self.Y_one_hot[idx].unsqueeze(0)
+            y = self.Y[idx]
 
             # Backward model with symmetry bias
             output_backward = self.backward_model(y_one_hot)
@@ -126,10 +131,13 @@ class ExperimentManager():
             self.optimizer_backward.step()
             test_loss = loss_backward.detach().numpy()
             self.test_losses_backward.append(test_loss)
-            self.probs_x0_given_y.append(F.softmax(cos_sim,
-                                         dim=1)[0][0].detach().numpy())
-            self.probs_x1_given_y.append(F.softmax(cos_sim,
-                                         dim=1)[0][1].detach().numpy())
+            prob_x0_given_y = F.softmax(cos_sim, dim=1)[0][0].detach().numpy()
+            prob_x1_given_y = F.softmax(cos_sim, dim=1)[0][1].detach().numpy()
+            self.probs_x0_given_y.append(prob_x0_given_y)
+            self.probs_x1_given_y.append(prob_x1_given_y)
+            pred = np.argmax([prob_x0_given_y, prob_x1_given_y])
+            accuracy = calc_accuracy([pred], [y])
+            self.accuracies_backward.append(accuracy)
             if self.steps_to_converge == test_iterations \
                 and test_loss < self.convergence_threshold:
                 self.steps_to_converge = step + 1
@@ -148,12 +156,20 @@ class ExperimentManager():
             self.test_losses_backward_test_only.append(
                 test_loss_test_only
                 )
-            self.probs_x0_given_y_test_only.append(
+            prob_x0_given_y_test_only = \
                 F.softmax(cos_sim_test_only, dim=1)[0][0].detach().numpy()
+            prob_x1_given_y_test_only = \
+                F.softmax(cos_sim_test_only, dim=1)[0][1].detach().numpy()
+            self.probs_x0_given_y_test_only.append(
+                prob_x0_given_y_test_only
                 )
             self.probs_x1_given_y_test_only.append(
-                F.softmax(cos_sim_test_only, dim=1)[0][1].detach().numpy()
+                prob_x1_given_y_test_only
                 )
+            pred_test_only = np.argmax(
+                [prob_x0_given_y_test_only, prob_x1_given_y_test_only])
+            accuracy_test_only = calc_accuracy([pred_test_only], [y])
+            self.accuracies_backward_test_only.append(accuracy_test_only)
             if self.steps_to_converge_test_only == test_iterations \
                 and test_loss_test_only < self.convergence_threshold:
                 self.steps_to_converge_test_only = step + 1

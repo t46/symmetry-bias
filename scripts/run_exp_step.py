@@ -1,5 +1,5 @@
 """
-Script to run the experiment
+Script to run the experiment to compare the number of steps to converge
 """
 import numpy as np
 import argparse

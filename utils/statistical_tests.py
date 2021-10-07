@@ -30,10 +30,10 @@ def run_statistical_tests(save_path: str, result_1: List, result_2: List,
         stat_1, p_val_1 = stats.shapiro(result_1)
         stat_2, p_val_2 = stats.shapiro(result_2)
         outcome = \
-            f'Shapiro-Wilk Test 1: stat={stat_1:.3f}, p={p_val_1:.3f}'
+            f'Shapiro-Wilk Test 1: stat={float(stat_1):.3f}, p={float(p_val_1):.3f}'
         print(outcome, file=f)
         outcome = \
-            f'Shapiro-Wilk Test 2: stat={stat_2:.3f}, p={p_val_2:.3f}'
+            f'Shapiro-Wilk Test 2: stat={float(stat_2):.3f}, p={float(p_val_2):.3f}'
         print(outcome, file=f)
         if p_val_1 > p_thr and p_val_2 > p_thr:
             is_gaussian = True
@@ -51,7 +51,7 @@ def run_statistical_tests(save_path: str, result_1: List, result_2: List,
             dfd = n_1 - 1
             f_val = var_2 / var_1
             p_val = 1 - stats.f.cdf(f_val, dfn=dfn, dfd=dfd)
-            outcome = f'F Test: f_val={f_val:.3f}, p={p_val:.3f}'
+            outcome = f'F Test: f_val={float(f_val):.3f}, p={float(p_val):.3f}'
             print(outcome, file=f)
             if p_val > p_thr:
                 is_equal_variance = True
@@ -66,7 +66,7 @@ def run_statistical_tests(save_path: str, result_1: List, result_2: List,
                     stat, p_val = stats.ttest_rel(
                         result_1, result_2)
                     outcome = \
-                        f'Paired Student’s t-test: stat={stat:.3f}, p={p_val:.3f}'
+                        f'Paired Student’s t-test: stat={float(stat):.3f}, p={float(p_val):.3f}'
                     print(outcome, file=f)
                     if p_val > p_thr:
                         print('Failed to reject hypothesis of equal mean\n',
@@ -79,7 +79,7 @@ def run_statistical_tests(save_path: str, result_1: List, result_2: List,
                     # Wilcoxon Signed-Rank Test:equal median or not
                     stat, p_val = stats.wilcoxon(result_1, result_2)
                     outcome = \
-                        f'Wilcoxon Signed-Rank Test: stat={stat:.3f}, p={p_val:.3f}'
+                        f'Wilcoxon Signed-Rank Test: stat={float(stat):.3f}, p={float(p_val):.3f}'
                     print(outcome, file=f)
                     if p_val > p_thr:
                         print('Failed to reject hypothesis of equal median\n',
@@ -93,7 +93,7 @@ def run_statistical_tests(save_path: str, result_1: List, result_2: List,
                 # Student's t-test / Welch's t-test: equal mean or not
                 stat, p_val = stats.ttest_ind(
                     result_1, result_2, equal_var=is_equal_variance)
-                outcome = f'Student’s t-test: stat={stat:.3f}, p={p_val:.3f}'
+                outcome = f'Student’s t-test: stat={float(stat):.3f}, p={float(p_val):.3f}'
                 print(outcome)
                 if p_val > p_thr:
                     print('Failed to reject hypothesis of equal mean\n',
@@ -107,7 +107,7 @@ def run_statistical_tests(save_path: str, result_1: List, result_2: List,
                 # Wilcoxon Signed-Rank Test: equal median or not
                 stat, p_val = stats.wilcoxon(result_1, result_2)
                 outcome = \
-                    f'Wilcoxon Signed-Rank Test: stat={stat:.3f}, p={p_val:.3f}'
+                    f'Wilcoxon Signed-Rank Test: stat={float(stat):.3f}, p={float(p_val):.3f}'
                 print(outcome, file=f)
                 if p_val > p_thr:
                     print('Failed to reject hypothesis of equal median\n',
@@ -120,7 +120,7 @@ def run_statistical_tests(save_path: str, result_1: List, result_2: List,
                 # Mann-Whitney U Test: equal median or not
                 stat, p_val = stats.mannwhitneyu(result_1, result_2)
                 outcome = \
-                    f'Mann-Whitney U Test: stat={stat:.3f}, p={p_val:.3f}'
+                    f'Mann-Whitney U Test: stat={float(stat):.3f}, p={float(p_val):.3f}'
                 print(outcome, file=f)
                 if p_val > p_thr:
                     print('Failed to reject hypothesis of equal median\n',
