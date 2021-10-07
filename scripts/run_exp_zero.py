@@ -10,7 +10,7 @@ from tqdm import tqdm
 import sys
 sys.path.append('..')
 sys.path.append('/Users/shiro/research/projects/symmetry-bias/')
-from utils.visualization import draw_box_plot
+from utils.visualization import draw_bar_plot
 from utils.exp_management import ExperimentManager
 from utils.statistical_tests import run_statistical_tests
 
@@ -38,7 +38,7 @@ def main(args):
 
     save_path = save_dir + 'accuracy_step_zero.pdf'
 
-    draw_box_plot(
+    draw_bar_plot(
         result_1=accuracies_vanilla,
         result_2=accuracies_symmetry,
         labels=['Vanilla', 'Symmetry Bias'],
