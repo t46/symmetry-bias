@@ -83,7 +83,7 @@ def draw_box_plot(
                   ylabel: str,
                   save_path: str
                   ) -> None:
-    """Draw line plot for comparison
+    """Draw box plot for comparison
 
     Args:
         result_1 (List[float]):
@@ -106,7 +106,46 @@ def draw_box_plot(
 
     sns.boxplot(data=result, palette=colors)
     plt.xticks([0, 1], labels)
-# x=labels, color=colors
+
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.show()
+
+def draw_bar_plot(
+                  result_1: List[float],
+                  result_2: List[float],
+                  labels: List[str],
+                  title: str,
+                  xlabel: str,
+                  ylabel: str,
+                  save_path: str
+                  ) -> None:
+    """Draw bar plot for comparison
+
+    Args:
+        result_1 (List[float]):
+            Result to be compared.
+            The length of the outer list is the number of random seeds.
+            The inner list is the result of each random seed.
+              Ex. The number of steps for convergence
+        result_2 (List[float]):
+            Result to be compared.
+            The length of the outer list is the number of random seeds.
+            The inner list is the result of each random seed.
+              Ex. The number of steps for convergence
+        labels (List[str]): Label names for two lines, respectively.
+        title (str): Title of the plot.
+        xlabel (str): The name of x-axis of the plot.
+        ylabel (str): The name of y-axis of the plot.
+        save_path (str): The name of the path to save the plot.
+    """
+    result = [np.array(result_1), np.array(result_2)]
+
+    sns.barplot(data=result, palette=colors)
+    plt.xticks([0, 1], labels)
 
     plt.title(title)
     plt.xlabel(xlabel)
